@@ -145,9 +145,9 @@ class ProjectInfo:
 		if os.path.exists(options.sample_list):
 			for timepoint in open(options.sample_list, 'r'):
 				self.samples.append(tuple(timepoint.rstrip('\n').split(';')))
-		elif options.sample_list.count(',') > 0:
+		elif options.sample_list.count(':') > 0:
 			for timepoint in options.samples_list.split(','):
-				self.samples.append(tuple(timepoint.split(';')))
+				self.samples.append(tuple(timepoint.split(':')))
 		else:
 			sys.stderr.write('FATAL: Error in extracting samples, please check your input.\n')
 		
