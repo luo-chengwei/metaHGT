@@ -77,6 +77,7 @@ class ProjectInfo:
 		self.assembly_dir = None
 		self.reads_dir = None
 		self.interleaved = []
+		self.outdir = None
 	
 	def getBAMFiles(sample1, sample2):
 		if sample not in self.samples:
@@ -149,6 +150,11 @@ class ProjectInfo:
 				self.samples.append(tuple(timepoint.split(';')))
 		else:
 			sys.stderr.write('FATAL: Error in extracting samples, please check your input.\n')
+		
+		# init outdir
+		self.outdir = options.out_dir
+		if not os.path.exists(self.outdir):
+			os.mkdir(self.outdir)
 		
 		# generate timepairs
 		for timepoint1, timepoint2 in zip(self.samples[:-1], self.samples[1:]):
@@ -281,8 +287,8 @@ def main(argv = sys.argv[1:]):
 		parser.error("A list of samples is required!")
 		exit(0)
 		
-	if options.outfile is None:
-		parser.error("An output file is required to supply!")
+	if options.out_dir is None:
+		parser.error("An output directory is required to supply!")
 		exit(0)
 	
 	# kickstart
