@@ -229,7 +229,7 @@ class ProjectInfo:
 					assemblyfile = self.getAssemblyFile(sample)
 					
 			# test samtools and bwa
-			bwaTest = Popen(options.bwa, shell=True, stdout=PIPE).stdout.read()
+			bwaTest = Popen(options.bwa, shell=True, stdout=PIPE, stderr=PIPE).stderr.read()
 			if bwaTest == None or len(bwaTest) == 0:
 				sys.stderr.write("FATAL: BWA not found in path!")
 				exit(0)
