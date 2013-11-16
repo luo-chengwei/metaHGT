@@ -177,7 +177,7 @@ class ProjectInfo:
 				sys.stderr.write('FATAL: cannot locate the BAM file directory, you supplied: %s\n' % options.bam_dir)
 		
 			for sample1, sample2 in self.timepairs:
-				bamfiles = getBAMFiles(sample1, sample2)
+				bamfiles = self.getBAMFiles(sample1, sample2)
 				
 		else:
 			if options.assembly_dir == None or options.reads_dir == None:
@@ -199,8 +199,8 @@ class ProjectInfo:
 			# test files	
 			for timepoint in self.samples:
 				for sample in timepoint:
-					readsfile = getReadsFile(sample)
-					assemblyfile = getAssemblyFile(sample)
+					readsfile = self.getReadsFile(sample)
+					assemblyfile = self.getAssemblyFile(sample)
 					
 			# test samtools and bwa
 			bwaTest = Popen(options.bwa, shell=True, stdout=PIPE).stdout.read()
