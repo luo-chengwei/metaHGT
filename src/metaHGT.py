@@ -80,10 +80,6 @@ class ProjectInfo:
 		self.outdir = None
 	
 	def getBAMFiles(self, sample1, sample2):
-		if sample not in self.samples:
-			sys.stderr.write('FATAL: Error in sample namsspace.\n')
-			exit(0)
-		
 		BAMs = []
 		meshedSamplePairs = [(sample1, sample1), (sample2, sample2), 
 							(sample1, sample2), (sample2, sample1)]
@@ -104,10 +100,6 @@ class ProjectInfo:
 		return BAMs
 		
 	def getReadsFile(self, sample):
-		if sample not in self.samples:
-			sys.stderr.write('FATAL: Error in sample namespace.\n')
-			exit(0)
-		
 		files = glob.glob(self.reads_dir + '/' + sample + '*1.fastq')
 		if len(files) == 0:
 			sys.stderr.write('FATAL: Eror in fetching the reads file for sample: %s\n' % sample)
@@ -123,10 +115,6 @@ class ProjectInfo:
 	
 	
 	def getAssemblyFile(self, sample):
-		if sample not in self.samples:
-			sys.stderr.write('FATAL: Error in sample namespace.\n')
-			exit(0)
-		
 		files = glob.glob(self.assembly_dir + '/' + sample + '*fa')
 		if len(files) == 0:
 			sys.stderr.write('FATAL: Eror in fetching the assembly file for sample: %s\n' % sample)
