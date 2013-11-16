@@ -73,7 +73,7 @@ class ProjectInfo:
 		self.timepairs = []
 		self.num_proc = 1
 		self.quiet = False
-		self.BAM_dir = None
+		self.bam_dir = None
 		self.assembly_dir = None
 		self.reads_dir = None
 		self.interleaved = []
