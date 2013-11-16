@@ -226,9 +226,9 @@ def main(argv = sys.argv[1:]):
 	
 	requiredOptions.add_option("-l", "--sample_list", type = "string", metavar = "FILE/STRING",
 							help = "Text file containing all sample names, one per line, in longitudinal order; \
-							replicates of the same time point should be separated by semicolon.\n\
+							replicates of the same time point should be separated by colon.\n\
 							Alternatively, you can directly supply the sample names in longitudinal order, \
-							timepoints separated by comma and replicates separated by semicolon.")
+							timepoints separated by comma and replicates separated by colon.")
 
 	requiredOptions.add_option("-o", "--out_dir", type = "string", metavar = "DIR",
 							help = "Directory where intermediary and output files be reported to.")
