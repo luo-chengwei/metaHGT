@@ -79,7 +79,7 @@ class ProjectInfo:
 		self.interleaved = []
 		self.outdir = None
 	
-	def getBAMFiles(sample1, sample2):
+	def getBAMFiles(self, sample1, sample2):
 		if sample not in self.samples:
 			sys.stderr.write('FATAL: Error in sample namsspace.\n')
 			exit(0)
@@ -103,7 +103,7 @@ class ProjectInfo:
 				
 		return BAMs
 		
-	def getReadsFile(sample):
+	def getReadsFile(self, sample):
 		if sample not in self.samples:
 			sys.stderr.write('FATAL: Error in sample namespace.\n')
 			exit(0)
@@ -122,7 +122,7 @@ class ProjectInfo:
 			return os.path.realpath(files[0])
 	
 	
-	def getAssemblyFile(sample):
+	def getAssemblyFile(self, sample):
 		if sample not in self.samples:
 			sys.stderr.write('FATAL: Error in sample namespace.\n')
 			exit(0)
