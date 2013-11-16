@@ -159,6 +159,8 @@ class ProjectInfo:
 		# otherwise, this will try to generate all the BAMs files needs.
 		
 		if options.bam_dir:
+			self.bam_dir = options.bam_dir
+			
 			if os.path.exists(options.bam_dir):
 				self.bam_dir = options.bam_dir
 			else:
