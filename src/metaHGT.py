@@ -234,7 +234,7 @@ class ProjectInfo:
 				sys.stderr.write("FATAL: BWA not found in path!")
 				exit(0)
 				
-			samtoolsTest = Popen(options.samtools, shell=True, stdout=PIPE).stdout.read()
+			samtoolsTest = Popen(options.samtools, shell=True, stdout=PIPE, stderr=PIPE).stderr.read()
 			if samtoolsTest == None or len(samtoolsTest) == 0:
 				sys.stderr.write("FATAL: samtools not found in path!")
 				exit(0)
