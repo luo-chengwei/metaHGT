@@ -158,16 +158,10 @@ class ProjectInfo:
 		# it would rely on you for generate the correct BAMs (sorted and indexed).
 		# otherwise, this will try to generate all the BAMs files needs.
 		
-		if options.bam_dir:
-			self.bam_dir = options.bam_dir
-			
-			if os.path.exists(options.bam_dir):
+		if options.bam_dir and os.path.exists(options.bam_dir):
 				self.bam_dir = options.bam_dir
-			else:
-				sys.stderr.write('FATAL: cannot locate the BAM file directory, you supplied: %s\n' % options.bam_dir)
-		
-			for sample1, sample2 in self.timepairs:
-				bamfiles = self.getBAMFiles(sample1, sample2)
+				for sample1, sample2 in self.timepairs:
+					bamfiles = self.getBAMFiles(sample1, sample2)
 				
 		else:
 			if options.assembly_dir == None or options.reads_dir == None:
