@@ -177,7 +177,7 @@ class ProjectInfo:
 				sys.stderr.write('FATAL: cannot locate the BAM file directory, you supplied: %s\n' % options.bam_dir)
 		
 			for sample1, sample2 in self.timepairs:
-				bamfiles = getBAMFile(sample1, sample2)
+				bamfiles = getBAMFiles(sample1, sample2)
 				
 		else:
 			if options.assembly_dir == None or options.reads_dir == None:
