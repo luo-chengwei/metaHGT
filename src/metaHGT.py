@@ -88,7 +88,7 @@ class ProjectInfo:
 		meshedSamplePairs = [(sample1, sample1), (sample2, sample2), 
 							(sample1, sample2), (sample2, sample1)]
 		for sampleA, sampleB in meshedSamplePairs:
-			files = glob.glob(self.BAM_dir + '/' + sampleA + '*' + sampleB + '*bam')
+			files = glob.glob(self.bam_dir + '/' + sampleA + '*' + sampleB + '*bam')
 			if len(files) == 0:
 				sys.stderr.write('FATAL: Eror in fetching the BAM file for samples: %s and %s\n' % (sampleA, sampleB))
 				exit(0)
@@ -170,11 +170,11 @@ class ProjectInfo:
 		# it would rely on you for generate the correct BAMs (sorted and indexed).
 		# otherwise, this will try to generate all the BAMs files needs.
 		
-		if options.BAM_dir:
-			if os.path.exists(options.BAM_dir):
-				self.BAM_dir = options.BAM_dir
+		if options.bam_dir:
+			if os.path.exists(options.bam_dir):
+				self.bam_dir = options.bam_dir
 			else:
-				sys.stderr.write('FATAL: cannot locate the BAM file directory, you supplied: %s\n' % options.BAM_dir)
+				sys.stderr.write('FATAL: cannot locate the BAM file directory, you supplied: %s\n' % options.bam_dir)
 		
 			for sample1, sample2 in self.timepairs:
 				bamfiles = getBAMFile(sample1, sample2)
