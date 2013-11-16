@@ -33,7 +33,7 @@ setup(
 	description = 'metaHGT (meta-community Horizontal Gene Transfer tracker): \
 		in-situ and real time HGT tracker for series metagenomes',
 	
-	scripts = ['src/metaHGT.py', 'src/calHGT.py'],
+	scripts = ['src/metaHGT.py', 'src/calHGT.py', 'src/bams.py'],
 	
 	author="Chengwei Luo",
     author_email="luo.chengwei@gatech.edu",
