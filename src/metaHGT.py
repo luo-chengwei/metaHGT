@@ -84,7 +84,7 @@ class ProjectInfo:
 		meshedSamplePairs = [(sample1, sample1), (sample2, sample2), 
 							(sample1, sample2), (sample2, sample1)]
 		for sampleA, sampleB in meshedSamplePairs:
-			files = glob.glob(self.bam_dir + '/' + sampleA + '.*' + sampleB + '*bam')
+			files = glob.glob(self.bam_dir + '/' + sampleA + '.vs.' + sampleB + '*bam')
 			if len(files) == 0:
 				sys.stderr.write('FATAL: Eror in fetching the BAM file for samples: %s and %s\n' % (sampleA, sampleB))
 				exit(0)
@@ -100,24 +100,24 @@ class ProjectInfo:
 		return BAMs
 		
 	def getReadsFile(self, sample):
-		files1 = glob.glob(self.reads_dir + '/' + sample + '.*1.fa')
+		files1 = glob.glob(self.reads_dir + '/' + sample + '*1.fa')
 		if len(files1) == 0:
-			files1 = glob.glob(self.reads_dir + '/' + sample + '.*1.fastq')
+			files1 = glob.glob(self.reads_dir + '/' + sample + '*1.fastq')
 		if len(files1) == 0:
-			files1 = glob.glob(self.reads_dir + '/' + sample + '.*1.fasta')
+			files1 = glob.glob(self.reads_dir + '/' + sample + '*1.fasta')
 			
-		files2 = glob.glob(self.reads_dir + '/' + sample + '.*2.fa')
+		files2 = glob.glob(self.reads_dir + '/' + sample + '*2.fa')
 		if len(files2) == 0:
-			files2 = glob.glob(self.reads_dir + '/' + sample + '.*2.fastq')
+			files2 = glob.glob(self.reads_dir + '/' + sample + '*2.fastq')
 		if len(files2) == 0:
-			files2 = glob.glob(self.reads_dir + '/' + sample + '.*2.fasta')
+			files2 = glob.glob(self.reads_dir + '/' + sample + '*2.fasta')
 			
 		if len(files1) == 0 and len(files2) == 0:
-			files = glob.glob(self.reads_dir + '/' + sample + '.*1.fa')
+			files = glob.glob(self.reads_dir + '/' + sample + '*fa')
 			if len(files) == 0:
-				files = glob.glob(self.reads_dir + '/' + sample + '.*1.fastq')
+				files = glob.glob(self.reads_dir + '/' + sample + '*fastq')
 			if len(files) == 0:
-				files = glob.glob(self.reads_dir + '/' + sample + '.*1.fasta')
+				files = glob.glob(self.reads_dir + '/' + sample + '*fasta')
 			
 			if len(files) == 0:
 				sys.stderr.write('FATAL: Eror in fetching the reads file for sample: %s\n' % sample)
@@ -157,7 +157,7 @@ class ProjectInfo:
 	
 	
 	def getAssemblyFile(self, sample):
-		files = glob.glob(self.assembly_dir + '/' + sample + '.*fa')
+		files = glob.glob(self.assembly_dir + '/' + sample + '*fa')
 		if len(files) == 0:
 			sys.stderr.write('FATAL: Eror in fetching the assembly file for sample: %s\n' % sample)
 			exit(0)
