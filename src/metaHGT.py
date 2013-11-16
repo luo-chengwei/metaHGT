@@ -124,7 +124,7 @@ class ProjectInfo:
 				exit(0)
 			
 			if len(files) > 1:
-				sys.stderr.write('FATAL: Ambiguous naming for reads file for sample: %\n' % sample)
+				sys.stderr.write('FATAL: Ambiguous naming for reads file for sample: %s\n' % sample)
 				sys.stderr.write('       The following files are found:\n')
 				for file in files:
 					sys.stderr.write('       %s\n' % file)
