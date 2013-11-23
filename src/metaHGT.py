@@ -136,7 +136,7 @@ class ProjectInfo:
 			if len(files1) == 0:
 				sys.stderr.write('FATAL: Eror in fetching the 5\' reads file for sample: %s\n' % sample)
 				exit(0)
-			if len(files) > 1:
+			if len(files1) > 1:
 				sys.stderr.write('FATAL: Ambiguous naming for reads file for sample: %\n' % sample)
 				sys.stderr.write('       The following files are found:\n')
 				for file in files1:
@@ -321,12 +321,13 @@ def main(argv = sys.argv[1:]):
 	sys.stdout.write("metaHGT started at %s\n"%(ctime()))
 	sys.stdout.flush()
 	
-	# if necessary, run bwa + samtools to generate sorted and indexed BAM files
-	
 	# check sanity of the files in required directories
 	projInfo = ProjectInfo()
 	projInfo.initProject(options)
 	
+	# if necessary, run bwa + samtools to generate sorted and indexed BAM files
+	
+	# run calHGT
 	
 	# end
 	sys.stdout.write("metaHGT finished at %s\n"%(ctime()))
