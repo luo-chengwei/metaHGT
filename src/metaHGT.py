@@ -67,6 +67,7 @@ import calHGT
 import bams
 
 ####################### PROJECT INFORMATION CLASS #############################
+
 class ProjectInfo:
 	def __init__(self):
 		self.samples = []
@@ -78,24 +79,32 @@ class ProjectInfo:
 		self.reads_dir = None
 		self.interleaved = []
 		self.outdir = None
+		self.bwa = None
+		self.samtools = None
 	
 	def getBAMFiles(self, sample1, sample2):
 		BAMs = []
 		meshedSamplePairs = [(sample1, sample1), (sample2, sample2), 
 							(sample1, sample2), (sample2, sample1)]
 		for sampleA, sampleB in meshedSamplePairs:
-			files = glob.glob(self.bam_dir + '/' + sampleA + '.vs.' + sampleB + '*bam')
-			if len(files) == 0:
+			bamfiles = glob.glob(self.bam_dir + '/' + sampleA + '.vs.' + sampleB + '*bam')
+			
+			if len(bamfiles) == 0:
 				sys.stderr.write('FATAL: Eror in fetching the BAM file for samples: %s and %s\n' % (sampleA, sampleB))
 				exit(0)
-			if len(files) > 1:
+			if len(bamfiles) > 1:
 				sys.stderr.write('FATAL: Ambiguous naming for BAM files for samples: %s and %s\n' % (sampleA, sampleB))
 				sys.stderr.write('       The following files are found:\n')
-				for file in files:
+				for file in bamfiles:
 					sys.stderr.write('       %s\n' % file)
 				exit(1)
 			else:
-				BAMs.append(os.path.realpath(files[0]))
+				bamfile = bamfiles[0]
+				baifile = bamfile + '.bai'
+				if not os.path.exists(baifile):
+					sys.stderr.write('FATAL: cannot locate the index file for BAM file: %s\n' % bamfile)
+					exit(1)
+				BAMs.append(os.path.realpath(bamfiles[0]))
 				
 		return BAMs
 		
@@ -174,12 +183,15 @@ class ProjectInfo:
 	def initProject(self, options):
 		if os.path.exists(options.sample_list):
 			for timepoint in open(options.sample_list, 'r'):
-				self.samples.append(tuple(timepoint.rstrip('\n').split(';')))
-		elif options.sample_list.count(':') > 0:
+				self.samples.append(tuple(timepoint.rstrip('\n').split(':')))
+		elif options.sample_list.count(',') > 0:
 			for timepoint in options.sample_list.split(','):
 				self.samples.append(tuple(timepoint.split(':')))
 		else:
 			sys.stderr.write('FATAL: Error in extracting samples, please check your input.\n')
+		
+		if options.quiet:
+			self.quiet = True
 		
 		# init outdir
 		self.outdir = options.out_dir
@@ -230,14 +242,18 @@ class ProjectInfo:
 					
 			# test samtools and bwa
 			bwaTest = Popen(options.bwa, shell=True, stdout=PIPE, stderr=PIPE).stderr.read()
-			if bwaTest == None or len(bwaTest) == 0:
-				sys.stderr.write("FATAL: BWA not found in path!")
+			if not bwaTest or bwaTest.count('not found') ==1:
+				sys.stderr.write("FATAL: BWA not found in path!\n")
 				exit(0)
+			else:
+				self.bwa = options.bwa
 				
 			samtoolsTest = Popen(options.samtools, shell=True, stdout=PIPE, stderr=PIPE).stderr.read()
-			if samtoolsTest == None or len(samtoolsTest) == 0:
-				sys.stderr.write("FATAL: samtools not found in path!")
+			if samtoolsTest.count('not found') ==1 or not samtoolsTest:
+				sys.stderr.write("FATAL: samtools not found in path!\n")
 				exit(0)
+			else:
+				self.samtools = options.samtools
 				
 	# End of initProject
 
@@ -287,7 +303,8 @@ def main(argv = sys.argv[1:]):
 							
 	optOptions.add_option("--bwa", type = "string", default = "bwa", metavar = "STRING",
 							help = "Location of BWA (Li et al, Bioinformatics, 2009). Only needed if you haven't \
-							generated the BAM files yourself; otherwise, please specify BAM_dir (-d/--BAM_dir).")
+							generated the BAM files yourself; otherwise, please specify BAM_dir (-d/--BAM_dir).\
+							default: [$PATH:/bwa], version: 0.7+")
 							
 	optOptions.add_option("--samtools", type = "string", default = "samtools", metavar = "STRING",
 							help = "Location of the Samtools binary (Li et al, Bioinformatics, 2009).Only needed \
@@ -326,8 +343,17 @@ def main(argv = sys.argv[1:]):
 	projInfo.initProject(options)
 	
 	# if necessary, run bwa + samtools to generate sorted and indexed BAM files
+	perform_mapping = False
+	if projInfo.bam_dir == None:
+		perform_mapping = True
 	
+	if perform_mapping:
+		bams.genBAMs(projInfo)
+		
 	# run calHGT
+	hgts = calHGT.calHGT(projInfo)
+	
+	# generate output
 	
 	# end
 	sys.stdout.write("metaHGT finished at %s\n"%(ctime()))
