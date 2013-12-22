@@ -96,3 +96,10 @@ For detailed usage, please run:
 $ metaHGT.py --help
 
 This will print out a detailed usage message.
+
+[Output files]
+================================================
+
+From running metaHGT.py, two files will be generated in the designated directory: HGTs_info.txt and HGTs_contigs.fa.
+
+
