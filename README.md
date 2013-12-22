@@ -103,17 +103,17 @@ This will print out a detailed usage message.
 [Output files]
 ================================================
 
-From running metaHGT.py, two files will be generated in the designated directory: HGTs_info.txt and HGTs_contigs.fa.
+From running metaHGT.py, an output file will be generated (specified by -o, or by default: ./HGTs_info.txt)
 
 - HGTs_info.txt is the general information about HGTs inferred by metaHGT. It is a tab-delimited text file. Each line is a record, which contains the following field:
   
   1. time point 1 (sample ID 1);
   2. time point 2 (sample ID 2);
   3. bin ID 1;
-  4. bin ID 2;
-  5. contig A from bin 1;
-  6. contig A breakpoint location;
-  7. contig A breakpoint orientation ('>' or '<');
+  4. contig A from bin 1;
+  5. contig A breakpoint location;
+  6. contig A breakpoint orientation ('>' or '<');
+  7. bin ID 2;
   8. contig B from bin2;
   9. contig B breakpoint location;
   10. contig B breakpoint orientation ('>' or '<');
@@ -124,6 +124,9 @@ From running metaHGT.py, two files will be generated in the designated directory
 
   Note on orientation: '>' means that the fragment to the left of breakpoint of the current contig is involved in HGT. For instance, if a sequence can be presented as '++++++++++++++^--------------------', where '^' denotes the breakpoint. With '>' orientation, it means the '++++++++' part was linked to some sequences in other populations by HGT; the opposite ('-------' part was involved) is true with a '<' orientation.
 
-- HGTs_contigs.fa is a multi-fastA file.
+[Utility scripts]
+================================================
+A few utility scripts can be found in the ./utilities directory. Below is a list:
+- GFF2HGT.py
 
 
