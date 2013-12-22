@@ -107,22 +107,23 @@ From running metaHGT.py, two files will be generated in the designated directory
 
 - HGTs_info.txt is the general information about HGTs inferred by metaHGT. It is a tab-delimited text file. Each line is a record, which contains the following field:
   
-  1, time point 1 (sample ID 1);
-  2, time point 2 (sample ID 2);
-  3, bin ID 1;
-  4, bin ID 2;
-  5, contig A from bin 1;
-  6, contig A breakpoint location;
-  7, contig A breakpoint orientation ('>' or '<');
-  8, contig B from bin2;
-  9, contig B breakpoint location;
-  10, contig B breakpoint orientation ('>' or '<');
-  11, percentage of bin 1 involved;
-  12, percentage of bin 2 involved;
-  13, raw p-value;
-  14, FDR-corrected p-value using Benjamini-Hochberg method.
+  1. time point 1 (sample ID 1);
+  2. time point 2 (sample ID 2);
+  3. bin ID 1;
+  4. bin ID 2;
+  5. contig A from bin 1;
+  6. contig A breakpoint location;
+  7. contig A breakpoint orientation ('>' or '<');
+  8. contig B from bin2;
+  9. contig B breakpoint location;
+  10. contig B breakpoint orientation ('>' or '<');
+  11. percentage of bin 1 involved;
+  12. percentage of bin 2 involved;
+  13. raw p-value;
+  14. FDR-corrected p-value using Benjamini-Hochberg method.
 
-  Note on orientation: '>' means that 
-- HGTs_contigs.fa is 
+  Note on orientation: '>' means that the fragment to the left of breakpoint of the current contig is involved in HGT. For instance, if a sequence can be presented as '++++++++++++++^--------------------', where '^' denotes the breakpoint. With '>' orientation, it means the '++++++++' part was linked to some sequences in other populations by HGT; the opposite ('-------' part was involved) is true with a '<' orientation.
+
+- HGTs_contigs.fa is a multi-fastA file.
 
 
