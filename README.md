@@ -3,9 +3,9 @@
 
 Real-time in situ Horizontal Gene Transfers (HGTs) detector using time series metagenomes
 
-Author: Chengwei Luo (luo.chengwei@gatech.edu; cluo@braodinstitute.org);
-Copyright: Chengwei Luo, Konstantinidis Lab, Georgia Institute of Technology, 2013;
-Citation: (we are working on it!!)
+- Author: Chengwei Luo (luo.chengwei@gatech.edu; cluo@braodinstitute.org);
+- Copyright: Chengwei Luo, Konstantinidis Lab, Georgia Institute of Technology, 2013;
+- Citation: (we are working on it!!)
 
 [What does it do]
 ================================================
