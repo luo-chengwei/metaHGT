@@ -62,11 +62,14 @@ Anaconda includes all the dependencies to run metaHGT.
 ** Input:
 
    You will absolutely need:
+
    - list of samples. They can be listed in a file in which each sample occupy a line, and replicates can be on the same line, separated by comma; you can also supply this list by typing them in the command line for the -l option;
+
    - all assembled contig files in fastA format.
   
   Then you will need either:
-   - all sorted and indexed BAM mapping files put in one directory. For instance, if you have 3 samples: A, B, and C, in longitudinal order; you will need cross-mapping and self-mapping .bam and .bai files of the adjacent samples (in this case: A-B, B-C pairs). For instance, for the A-B pair, you will need readA.vs.assemblyA.bam, readA.vs.assemblyB.bam, readB.vs.assemblyB.bam, readB.vs.assemblyA.bam; and all the associated .bai files from the indexing by Samtools.
+   
+- all sorted and indexed BAM mapping files put in one directory. For instance, if you have 3 samples: A, B, and C, in longitudinal order; you will need cross-mapping and self-mapping .bam and .bai files of the adjacent samples (in this case: A-B, B-C pairs). For instance, for the A-B pair, you will need readA.vs.assemblyA.bam, readA.vs.assemblyB.bam, readB.vs.assemblyB.bam, readB.vs.assemblyA.bam; and all the associated .bai files from the indexing by Samtools.
   
   OR, if you don't have them ready, you will need:
    - reads of each sample in the one directory. 
@@ -101,5 +104,25 @@ This will print out a detailed usage message.
 ================================================
 
 From running metaHGT.py, two files will be generated in the designated directory: HGTs_info.txt and HGTs_contigs.fa.
+
+- HGTs_info.txt is the general information about HGTs inferred by metaHGT. It is a tab-delimited text file. Each line is a record, which contains the following field:
+  
+  1, time point 1 (sample ID 1);
+  2, time point 2 (sample ID 2);
+  3, bin ID 1;
+  4, bin ID 2;
+  5, contig A from bin 1;
+  6, contig A breakpoint location;
+  7, contig A breakpoint orientation ('>' or '<');
+  8, contig B from bin2;
+  9, contig B breakpoint location;
+  10, contig B breakpoint orientation ('>' or '<');
+  11, percentage of bin 1 involved;
+  12, percentage of bin 2 involved;
+  13, raw p-value;
+  14, FDR-corrected p-value using Benjamini-Hochberg method.
+
+  Note on orientation: '>' means that 
+- HGTs_contigs.fa is 
 
 
