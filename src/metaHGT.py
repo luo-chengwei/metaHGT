@@ -81,6 +81,10 @@ class ProjectInfo:
 		self.outdir = None
 		self.bwa = None
 		self.samtools = None
+		self.contig_length = 0
+		self.mapq = 0
+		self.align_perc = 0.
+		self.min_links = 0
 	
 	def getBAMFiles(self, sample1, sample2):
 		BAMs = []
@@ -193,10 +197,11 @@ class ProjectInfo:
 		if options.quiet:
 			self.quiet = True
 		
-		# init outdir
-		self.outdir = options.out_dir
-		if not os.path.exists(self.outdir):
-			os.mkdir(self.outdir)
+		# init outfile
+		self.outfile = options.outfile
+		
+		# qvalue cutoff
+		self.qvalue = options.qvalue
 		
 		# generate timepairs
 		for timepoint1, timepoint2 in zip(self.samples[:-1], self.samples[1:]):
@@ -206,6 +211,10 @@ class ProjectInfo:
 		
 		self.num_proc = options.num_proc
 		self.quiet = options.quiet
+		self.contig_length = options.contig_length
+		self.mapq = options.mapq
+		self.align_perc = options.align_perc
+		self.min_links = options.min_links
 		
 		# you supply either BAM dir or assembly dir + reads dir
 		# if you supply BAMs, then it skips the BWA+Samtoools step to generate the BAM files,
@@ -272,15 +281,15 @@ def main(argv = sys.argv[1:]):
 							Alternatively, you can directly supply the sample names in longitudinal order, \
 							timepoints separated by comma and replicates separated by colon.")
 
-	requiredOptions.add_option("-o", "--out_dir", type = "string", metavar = "DIR",
-							help = "Directory where intermediary and output files be reported to.")
-
 	parser.add_option_group(requiredOptions)
 
 	# Optional arguments that need to be supplied if not the same as default
 	
 	optOptions = OptionGroup(parser, "Optional parameters",
 						"There options are optional, and may be supplied in any order.")
+						
+	optOptions.add_option("-o", "--outfile", type = "string", default = 'HGTs_info.txt', metavar = "FILE",
+							help = "Output file where HGTs will be reported to.")
 	
 	optOptions.add_option("-b", "--bam_dir", type = "string", default = "BAMs", metavar = "DIR",
 							help = "Directory where sorted bam files (reads versus assembly, same sample) are, \
@@ -292,8 +301,8 @@ def main(argv = sys.argv[1:]):
 							the naming should follow \"sample.*.fa\" convention.\n\
 							The tags of contigs should follow: binID.contigXX.* fashion, where binID is the \
 							identifier of bins, and contigXX is the identifier of the contigs belong to the bin. \
-							Unclassified (unbinned) contigs should be renamed as ID.contigXX.*, where ID can be \
-							anything but the claimed binIDs.")
+							Unclassified (unbinned) contigs should be renamed as sampleID.contigXX.*, where ID \
+							should be the sample ID.")
 							
 	optOptions.add_option("-r", "--reads_dir", type = "string", default = "Reads", metavar = "DIR",
 							help = "Directory where reads are. They should be in fastq format, \
@@ -309,6 +318,21 @@ def main(argv = sys.argv[1:]):
 	optOptions.add_option("--samtools", type = "string", default = "samtools", metavar = "STRING",
 							help = "Location of the Samtools binary (Li et al, Bioinformatics, 2009).Only needed \
 							if you haven't generated the BAM files yourself; otherwise, please specify BAM dir (-d/--bam_dir).")
+
+	optOptions.add_option("--contig_length", type = "int", default = 1000, metavar = "INT",
+							help = "minimun contig length for contigs to be considered in HGT inference [default: 1000]")
+
+	optOptions.add_option("--mapq", type = "int", default = 30, metavar = "INT",
+							help = "minimun mapping quality for a mapped read to be considered in HGT inference [default: 30]")
+
+	optOptions.add_option("--align_perc", type = "float", default = 0.9, metavar = "FLOAT",
+							help = "minimun aligned length percetange for reads to be considered in HGT inference [default: 0.9]")
+
+	optOptions.add_option("--min_links", type = "int", default = 3, metavar = "INT",
+							help = "minimun cross-aligned read numbers required to initiate an HGT hotspot scan [default: 3]")
+
+	optOptions.add_option("--qvalue", type = "float", default = 0.2, metavar = "FLOAT",
+							help = "max Q-value (FDR corrected p-value) cutoff, HGTs higher then this won't be reported. [default: 0.2]")
 
 	optOptions.add_option("-t", "--num_proc", type = "int", default = 1, metavar = 'INT',
 							help = "Number of processor for BinGeR to use [default: 1].")
@@ -330,10 +354,10 @@ def main(argv = sys.argv[1:]):
 		parser.error("A list of samples is required!")
 		exit(0)
 		
-	if options.out_dir is None:
-		parser.error("An output directory is required to supply!")
+	if options.qvalue < 0 or options.qvalue > 1:
+		parser.error("Q value should be float ranging between 0 and 1, you supplied: %.2f\n" % options.qvalue)
 		exit(0)
-	
+		
 	# kickstart
 	sys.stdout.write("metaHGT started at %s\n"%(ctime()))
 	sys.stdout.flush()
@@ -351,9 +375,24 @@ def main(argv = sys.argv[1:]):
 		bams.genBAMs(projInfo)
 		
 	# run calHGT
-	hgts = calHGT.calHGT(projInfo)
+	HGTs = calHGT.calHGT(projInfo)
 	
 	# generate output
+	ofh = open(projInfo.outfile, 'w')
+	ofh.write('# output of metaHGT v%s\n' % __version__)
+	ofh.write('# author: %s\n' % __author__)
+	ofh.write('# copyright: Chengwei Luo, Konstantinidis Lab, Georgia Institute of Technology, 2013.\n')
+	ofh.write('# run command: %s\n' % ' '.join(argv))
+	ofh.write('#timepoint1\ttimepoint2\tbin1\tbin2\tcontigA\tbreakpointA\torientationA\t')
+	ofh.write('bin2\tcontigB\tbreakpointB\torientationB\tperc_1\tperc_2\traw_pval\tadj_pval\n')
+	
+	for (sample1, sample2) in HGTs:
+		hs = HGTs[(sample1, sample2)]
+		for h in hs:
+			if h.adj_pvalue > projInfo.qvalue:
+				continue
+			ofh.write('%s\t%s\t%s\n' % (sample1, sample2, h.strHGT()))
+	ofh.close()
 	
 	# end
 	sys.stdout.write("metaHGT finished at %s\n"%(ctime()))
