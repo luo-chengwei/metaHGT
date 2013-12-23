@@ -19,7 +19,7 @@ metaHGT requires time-series metagenomes, which means multiple sampling points a
 
 In terms of selecting sequencing technologies, currently metaHGT requires paired-end reads, preferably Illumina; but in theory, other sequencing platforms such as Ion Torrent and AB SOLid would work as well. As other sequencing technologies that would produce significantly longer sequences (e.g., Oxford Nanopore's platforms) are getting huge momentum and will likely to be proven to be a breakthrough in DNA sequencing, metaHGT will evolve to use also longer single reads to better resolve HGTs.
 
-You will need to assemble your metagenomes into contigs, and bin them into population bins. How to do that is out of the scope of metaHGT, but you can in general use the hybrid protocol presented in my previous work (Luo et al, ISME, 2012; Luo et al, PLoS ONE, 2012) to assemble a metagenome, and you can use BinGeR (Luo et al, in prep; https://github.com/luo-chengwei/BinGeR) to bin those contigs into population bins. After that you can run metaHGT by following the next section.
+You will need to assemble your metagenomes into contigs, and bin them into population bins. How to do that is out of the scope of metaHGT, but you can in general use the hybrid protocol presented in my previous work (Luo et al, ISME J, 2012; Luo et al, PLoS ONE, 2012) to assemble a metagenome, and you can use BinGeR (Luo et al, in prep; https://github.com/luo-chengwei/BinGeR) to bin those contigs into population bins. After that you can run metaHGT by following the next section.
 
 [How to install]
 ================================================
