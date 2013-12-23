@@ -124,9 +124,5 @@ From running metaHGT.py, an output file will be generated (specified by -o, or b
 
   Note on orientation: '>' means that the fragment to the left of breakpoint of the current contig is involved in HGT. For instance, if a sequence can be presented as '++++++++++++++^--------------------', where '^' denotes the breakpoint. With '>' orientation, it means the '++++++++' part was linked to some sequences in other populations by HGT; the opposite ('-------' part was involved) is true with a '<' orientation.
 
-[Utility scripts]
-================================================
-A few utility scripts can be found in the ./utilities directory. Below is a list:
-- GFF2HGT.py
 
 
