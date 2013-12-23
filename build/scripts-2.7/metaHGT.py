@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/Users/cluo/anaconda/bin/python
 
 __author__ = 'Chengwei Luo (luo.chengwei@gatech.edu)'
 __version__ = '0.0.1'
