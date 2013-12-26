@@ -187,7 +187,8 @@ class ProjectInfo:
 	def initProject(self, options):
 		if os.path.exists(options.sample_list):
 			for timepoint in open(options.sample_list, 'r'):
-				print timepoint[:-1], timepoint[:-1].split(':')
+				if timepoint[:-1] == '':
+					continue
 				self.samples.append(tuple(timepoint[:-1].split(':')))
 		elif options.sample_list.count(',') > 0:
 			for timepoint in options.sample_list.split(','):
