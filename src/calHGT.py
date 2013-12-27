@@ -120,7 +120,11 @@ def estimate_library(bamfh, ref_length, projInfo):
 		length = ref_length[reference]
 		if length < projInfo.contig_length:
 			continue
-		reads = bamfh.fetch(reference)
+		try:
+			reads = bamfh.fetch(reference)
+		except ValueError:
+			continue
+			
 		for read in reads:
 			if read.mapq < projInfo.mapq:
 				continue
