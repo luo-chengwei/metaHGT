@@ -252,8 +252,12 @@ def infer_HGT(spans0, spans1, bamfhs):
 	# bamfhs order: 00, 11, 01, 10
 	HGTs = []
 	for span0, span1 in product(spans0, spans1):
-		ref0_reads10 = bamfhs[3].fetch(span0.reference, span0.left, span0.right)
-		ref1_reads10 = bamfhs[3].fetch(span1.reference, span1.left, span1.right)
+		try:
+			ref0_reads10 = bamfhs[3].fetch(span0.reference, span0.left, span0.right)
+			ref1_reads10 = bamfhs[3].fetch(span1.reference, span1.left, span1.right)
+		except ValueError:
+			continue
+			
 		breakpoint0 = infer_breakpoint(span0.reference, ref0_reads10)
 		breakpoint1 = infer_breakpoint(span1.reference, ref1_reads10)
 		
@@ -268,18 +272,21 @@ def infer_HGT(spans0, spans1, bamfhs):
 		e.breakpoint_a = breakpoint0
 		e.breakpoint_b = breakpoint1
 		
-		ref0_reads00 = bamfhs[0].fetch(span0.reference, span0.left, span0.right)
-		ref0_reads11 = bamfhs[1].fetch(span0.reference, span0.left, span0.right)
-		ref0_reads01 = bamfhs[2].fetch(span0.reference, span0.left, span0.right)
-		ref0_reads10 = bamfhs[3].fetch(span0.reference, span0.left, span0.right)
-		ref0_mappings = [ref0_reads00, ref0_reads11, ref0_reads01, ref0_reads10]
+		try:
+			ref0_reads00 = bamfhs[0].fetch(span0.reference, span0.left, span0.right)
+			ref0_reads11 = bamfhs[1].fetch(span0.reference, span0.left, span0.right)
+			ref0_reads01 = bamfhs[2].fetch(span0.reference, span0.left, span0.right)
+			ref0_reads10 = bamfhs[3].fetch(span0.reference, span0.left, span0.right)
+			ref0_mappings = [ref0_reads00, ref0_reads11, ref0_reads01, ref0_reads10]
 		
-		ref1_reads00 = bamfhs[0].fetch(span1.reference, span1.left, span1.right)
-		ref1_reads11 = bamfhs[1].fetch(span1.reference, span1.left, span1.right)
-		ref1_reads01 = bamfhs[2].fetch(span1.reference, span1.left, span1.right)
-		ref1_reads10 = bamfhs[3].fetch(span1.reference, span1.left, span1.right)
-		ref1_mappings = [ref1_reads00, ref1_reads11, ref1_reads01, ref1_reads10]
-		
+			ref1_reads00 = bamfhs[0].fetch(span1.reference, span1.left, span1.right)
+			ref1_reads11 = bamfhs[1].fetch(span1.reference, span1.left, span1.right)
+			ref1_reads01 = bamfhs[2].fetch(span1.reference, span1.left, span1.right)
+			ref1_reads10 = bamfhs[3].fetch(span1.reference, span1.left, span1.right)
+			ref1_mappings = [ref1_reads00, ref1_reads11, ref1_reads01, ref1_reads10]
+		except ValueError:
+			continue
+			
 		pvalue, percentage_a, percentage_b = test_HGT(ref0_mappings, e.breakpoint_a, \
 													ref1_mappings, e.breakpoint_b)
 		
