@@ -355,6 +355,9 @@ def HGT_search(lib_stats, bamfhs, projInfo):
 		ref1 = bamfhs[3].getrname(read.mrnm)
 		ref0 = bamfhs[3].getrname(read.tid)
 		
+		if ref0 not in refs0 or ref1 not in refs0:
+			continue
+			
 		# length filter
 		if refs0[ref0] < projInfo.contig_length or refs0[ref1] < projInfo.contig_length:
 			continue
@@ -379,6 +382,7 @@ def HGT_search(lib_stats, bamfhs, projInfo):
 	# and corresponding percentage and p-value	
 	if not projInfo.quiet:
 		sys.stdout.write('Calculating HGT precise locations and likelihood...\n')
+	
 	HGTs = []
 	for (binID0, binID1) in G:
 		for (ref0, ref1) in G[(binID0, binID1)]:
